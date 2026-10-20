@@ -111,3 +111,12 @@ CREATE POLICY "Household members can update shopping lists"
         auth.jwt() ->> 'role' = 'household_member'
         OR auth.uid() = user_id
     );
+
+-- Explicit Data API access for the server-side MCP client.
+-- Keep browser/anonymous access closed; RLS remains the row boundary.
+REVOKE ALL ON TABLE public.recipes FROM PUBLIC, anon;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.recipes TO service_role;
+REVOKE ALL ON TABLE public.meal_plans FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.meal_plans TO service_role;
+REVOKE ALL ON TABLE public.shopping_lists FROM PUBLIC, anon;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.shopping_lists TO service_role;

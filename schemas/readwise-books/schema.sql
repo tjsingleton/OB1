@@ -32,6 +32,11 @@ CREATE INDEX IF NOT EXISTS idx_readwise_books_author
 CREATE INDEX IF NOT EXISTS idx_readwise_books_category
   ON readwise_books (category);
 
+-- Book metadata is private. Only the server-side capture/import clients need it.
+ALTER TABLE public.readwise_books ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE public.readwise_books FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.readwise_books TO service_role;
+
 -- ============================================================
 -- 2. GET HIGHLIGHTS FOR A BOOK
 --    Returns highlights in the order you encountered them in the
