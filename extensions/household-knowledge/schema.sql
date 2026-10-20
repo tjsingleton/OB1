@@ -75,3 +75,10 @@ CREATE TRIGGER update_household_items_updated_at
 -- INSERT INTO household_items (user_id, name, category, location, details, notes) VALUES
 -- (auth.uid(), 'Living Room Paint', 'paint', 'Living Room', '{"brand": "Sherwin Williams", "color": "Sea Salt", "code": "SW 6204"}', 'Purchased 2 gallons in March 2025'),
 -- (auth.uid(), 'Dishwasher', 'appliance', 'Kitchen', '{"brand": "Bosch", "model": "SHPM65Z55N", "serial": "FD12345678", "purchase_date": "2024-06-15"}', 'Still under warranty until June 2026');
+
+-- Explicit Data API access for the server-side MCP client.
+-- Keep browser/anonymous access closed; RLS remains the row boundary.
+REVOKE ALL ON TABLE public.household_items FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.household_items TO service_role;
+REVOKE ALL ON TABLE public.household_vendors FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.household_vendors TO service_role;

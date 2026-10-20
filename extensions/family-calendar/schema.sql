@@ -48,3 +48,15 @@ CREATE INDEX idx_activities_family_member ON activities(family_member_id);
 CREATE INDEX idx_activities_user_dates ON activities(user_id, start_date, end_date);
 CREATE INDEX idx_important_dates_user_date ON important_dates(user_id, date_value);
 CREATE INDEX idx_family_members_user ON family_members(user_id);
+
+-- Explicit Data API access for the server-side MCP client.
+-- Keep browser/anonymous access closed; RLS remains the row boundary.
+ALTER TABLE public.family_members ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE public.family_members FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.family_members TO service_role;
+ALTER TABLE public.activities ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE public.activities FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.activities TO service_role;
+ALTER TABLE public.important_dates ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE public.important_dates FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.important_dates TO service_role;

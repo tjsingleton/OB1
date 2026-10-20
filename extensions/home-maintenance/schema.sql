@@ -111,3 +111,10 @@ CREATE TRIGGER update_task_after_log
 -- (auth.uid(), 'HVAC Filter Replacement', 'hvac', 90, now() + INTERVAL '90 days', 'medium', 'Use 16x25x1 pleated filters'),
 -- (auth.uid(), 'Gutter Cleaning', 'exterior', 180, now() + INTERVAL '180 days', 'medium', 'Best to do before rainy season'),
 -- (auth.uid(), 'Water Heater Inspection', 'plumbing', 365, now() + INTERVAL '365 days', 'low', 'Check for leaks and sediment buildup');
+
+-- Explicit Data API access for the server-side MCP client.
+-- Keep browser/anonymous access closed; RLS remains the row boundary.
+REVOKE ALL ON TABLE public.maintenance_tasks FROM PUBLIC, anon;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.maintenance_tasks TO service_role;
+REVOKE ALL ON TABLE public.maintenance_logs FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.maintenance_logs TO service_role;

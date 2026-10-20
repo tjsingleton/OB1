@@ -172,3 +172,16 @@ CREATE TRIGGER update_applications_updated_at
 -- Sample data (optional - uncomment to insert examples)
 -- INSERT INTO companies (user_id, name, industry, size, remote_policy) VALUES
 -- (auth.uid(), 'TechCorp', 'Enterprise Software', 'enterprise', 'remote');
+
+-- Explicit Data API access for the server-side MCP client.
+-- Keep browser/anonymous access closed; RLS remains the row boundary.
+REVOKE ALL ON TABLE public.companies FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.companies TO service_role;
+REVOKE ALL ON TABLE public.job_postings FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.job_postings TO service_role;
+REVOKE ALL ON TABLE public.applications FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.applications TO service_role;
+REVOKE ALL ON TABLE public.interviews FROM PUBLIC, anon;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.interviews TO service_role;
+REVOKE ALL ON TABLE public.job_contacts FROM PUBLIC, anon;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.job_contacts TO service_role;

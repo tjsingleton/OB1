@@ -1,0 +1,26 @@
+name: Data API permissions
+
+on:
+  pull_request:
+    paths:
+      - 'extensions/**'
+      - 'schemas/**'
+      - 'recipes/adaptive-capture-classification/**'
+      - 'docs/01-getting-started.md'
+      - 'scripts/test-data-api-permissions.mjs'
+      - '.github/workflows/data-api-permissions.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  permissions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/test-data-api-permissions.mjs
+      - run: node scripts/test-data-api-permissions.mjs --legacy-defaults
