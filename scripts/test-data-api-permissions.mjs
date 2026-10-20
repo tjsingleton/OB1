@@ -35,7 +35,7 @@ try {
   docker('network', 'create', name);
   docker('run', '-d', '--name', db, '--network', name, '-e', `POSTGRES_PASSWORD=${password}`, 'pgvector/pgvector:pg17');
   for (let n = 0; ; n++) {
-    try { sql('select 1;'); break; } catch (e) { if (n === 59) throw e; await sleep(500); }
+    try { docker('exec', db, 'pg_isready', '-h', '127.0.0.1', '-U', 'postgres'); sql('select 1;'); break; } catch (e) { if (n === 59) throw e; await sleep(500); }
   }
   sql(`CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN BYPASSRLS;
     CREATE ROLE authenticator LOGIN PASSWORD '${password}' NOINHERIT;
