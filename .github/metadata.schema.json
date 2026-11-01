@@ -47,6 +47,20 @@
       },
       "additionalProperties": false
     },
+    "contributors": {
+      "type": "array",
+      "description": "Additional contributor attribution, preserving the primary author.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "github": { "type": "string" },
+          "contribution": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
     "version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
