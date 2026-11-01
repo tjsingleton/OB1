@@ -54,12 +54,15 @@ jobs:
       - name: Test gate security helpers when present
         run: |
           if [ -f .github/scripts/gate-context.test.cjs ]; then
-            node --test .github/scripts/gate-context.test.cjs
+            node --test .github/scripts/*.test.cjs
             python3 -B .github/scripts/test_gate_artifact.py
           fi
 
       - name: Install metadata schema validator
         run: python3 -m pip install check-jsonschema
+
+      - name: Test metadata schema compatibility
+        run: python3 -B .github/scripts/test_metadata_schema.py
 
       - name: Get changed files
         id: changed
@@ -125,7 +128,8 @@ jobs:
           allowed_pattern='^(recipes|schemas|dashboards|integrations|skills|primitives|extensions|docs|resources|\.github|\.gitkeep|\.gitignore|\.markdownlint)'
           while IFS= read -r f; do
             [ -z "$f" ] && continue
-            if ! echo "$f" | grep -qE "$allowed_pattern"; then
+            if ! echo "$f" | grep -qE "$allowed_pattern" &&
+               ! node .github/scripts/contribution-scope.cjs "$f" "$CONTRIB_DIRS"; then
               bad_files="${bad_files}  - \`$f\`\n"
               rule1_pass=false
             fi
@@ -534,6 +538,9 @@ jobs:
           while IFS= read -r f; do
             [ -z "$f" ] && continue
             in_scope=false
+            if node .github/scripts/contribution-scope.cjs "$f" "$CONTRIB_DIRS"; then
+              in_scope=true
+            fi
             while IFS= read -r dir; do
               [ -z "$dir" ] && continue
               if echo "$f" | grep -qE "^${dir}/"; then
