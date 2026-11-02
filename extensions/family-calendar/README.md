@@ -23,7 +23,7 @@ Two kids, two parents, overlapping schedules. Soccer practice conflicts with the
 - Nullable foreign keys (activities can belong to one person or the whole family)
 - Querying across date ranges
 
-> **Note:** This extension doesn't use Row Level Security. RLS is introduced in Extension 4 (Meal Planning), where shared household access makes it necessary. Extensions 1-3 are single-user systems.
+> **Note:** RLS is enabled with no client policies. The single-user MCP server uses `service_role`, which bypasses RLS and has explicit table grants. Anonymous clients cannot access these tables.
 
 ## What It Does
 

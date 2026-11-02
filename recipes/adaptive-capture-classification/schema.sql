@@ -116,3 +116,9 @@ CREATE POLICY "Users manage their own A/B comparisons"
     ON ab_comparisons
     FOR ALL
     USING (auth.role() = 'authenticated');
+
+-- capture-with-gating.ts uses the service-role client for reads and upserts.
+GRANT SELECT, INSERT, UPDATE ON TABLE public.correction_learnings TO service_role;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.classification_outcomes TO service_role;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.capture_thresholds TO service_role;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.ab_comparisons TO service_role;

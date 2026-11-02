@@ -35,6 +35,11 @@ Intermediate
 
 ## Setup
 
+1. Apply the schema in Step 1.
+2. Configure capture types and user context in Steps 2 and 3.
+3. Add gating and confirmation handling in Steps 4 and 5.
+4. Enable the optional A/B comparison in Step 6 if needed.
+
 ### Step 1: Run the schema migration
 
 Run `schema.sql` against your Supabase project. This creates four tables alongside your

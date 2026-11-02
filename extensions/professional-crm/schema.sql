@@ -190,3 +190,12 @@ BEGIN
     LIMIT max_results;
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+-- Explicit Data API access for the server-side MCP client.
+-- Keep browser/anonymous access closed; RLS remains the row boundary.
+REVOKE ALL ON TABLE public.professional_contacts FROM PUBLIC, anon;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.professional_contacts TO service_role;
+REVOKE ALL ON TABLE public.contact_interactions FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.contact_interactions TO service_role;
+REVOKE ALL ON TABLE public.opportunities FROM PUBLIC, anon;
+GRANT SELECT, INSERT ON TABLE public.opportunities TO service_role;
